@@ -9,6 +9,8 @@ import ValidateRequest from '../../middlewares/ValidateRequest'
 import { AuthControllers } from './auth.controller'
 import validateImageFile from '../../middlewares/validateImageFile'
 import { ImageFilesArrayZodSchema } from '../imageMultipleArrayzodSchema/image.validation'
+import auth from '../../middlewares/auth'
+import { USER_ROLE } from '../user/user.constant'
 
 const router = express.Router()
 
@@ -24,5 +26,14 @@ router.post(
   parseBody,
   ValidateRequest(UserValidations.createUserValidationSchema),
   userControllers.createUser,
+)
+
+
+
+router.put('/recover-password', AuthControllers.passwordRecover)
+router.put(
+  '/change-password',
+  auth(USER_ROLE.admin, USER_ROLE.user),
+  AuthControllers.changePassword,
 )
 export const AuthRoutes = router

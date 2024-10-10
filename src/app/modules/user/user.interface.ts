@@ -10,6 +10,7 @@ export type TUser = {
   role: 'admin' | 'user'
   address?: string
   image: string
+  
 }
 
 export interface UserModel extends Model<TUser> {
@@ -62,4 +63,11 @@ export interface TGetBookingsResponse {
   statusCode: number
   message: string
   data: IBooking[]
+}
+
+
+export type TRecoverPassword = {
+  email: string
+  phone: string
+  password: string
 }
