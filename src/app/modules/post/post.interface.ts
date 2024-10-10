@@ -43,7 +43,10 @@ export interface TPost {
   tags: "premium" | "everyone";
   comments?: TComment[];
   commentsCount?: number;
-  upVotes?: number;
-  downVotes?: number;
+  //   upVotes?: number;
+  //   downVotes?: number;
+  upVotes: Types.ObjectId[];
+  downVotes: Types.ObjectId[];
+
   author: Types.ObjectId;
 }

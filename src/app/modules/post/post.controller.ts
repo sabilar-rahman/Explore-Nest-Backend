@@ -6,6 +6,7 @@ import { postServices } from "./post.service";
 import catchAsync from "../utils/catchAsync";
 import sendResponse from "../utils/sendResponse";
 import Post from "./post.model";
+import { getUserInfoFromToken } from "../utils/getUserInfoFromToken";
 
 const createPost = catchAsync(async (req, res) => {
   const postInfo = req.body;
@@ -84,11 +85,49 @@ const deletePost = catchAsync(async (req, res) => {
 });
 
 
+
+
+
+
+
+// upvote and downvote
+
+const upVotePost = catchAsync(async (req, res) => {
+    const { id } = req.params
+    const token = req.headers.authorization
+    const { id: userId } = getUserInfoFromToken(token as string)
+    const result = await postServices.upVotePostIntoDB(id, userId)
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Post deleted successfully',
+      data: result,
+    })
+  })
+  const downVotePost = catchAsync(async (req, res) => {
+    const { id } = req.params
+    const token = req.headers.authorization
+    const { id: userId } = getUserInfoFromToken(token as string)
+    const result = await postServices.downVotePostIntoDB(id, userId)
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Post deleted successfully',
+      data: result,
+    })
+  })
+
+
 export const postControllers = {
   createPost,
   getAllPosts,
   getSinglePost,
   updatePost,
   deletePost,
+
+
+
+  upVotePost,
+  downVotePost,
 
 };

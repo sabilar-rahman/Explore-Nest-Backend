@@ -32,8 +32,9 @@ router.delete(
   postControllers.deletePost
 );
 
-
-
+// upvote and downvote 
+router.post('/upvote/:id', postControllers.upVotePost)
+router.post('/downvote/:id', postControllers.downVotePost)
 
 
 
