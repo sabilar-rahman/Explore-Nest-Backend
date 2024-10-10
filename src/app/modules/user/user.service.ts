@@ -1,3 +1,4 @@
+import { Types } from 'mongoose'
 import { Booking } from '../booking/booking.model'
 import { TUser } from './user.interface'
 import { User } from './user.model'
@@ -36,9 +37,107 @@ const getMyBookingsFromDb = async (email: string) => {
   }
 }
 
+
+
+
+
+
+
+
+
+
+type FollowPayload = {
+  userId: string // Assuming you're passing userId and targetedId as strings
+  targetedId: string
+}
+
+const followUser = async (payload: FollowPayload) => {
+  const { userId, targetedId } = payload
+
+  // Convert string IDs to ObjectId
+  const userObjectId = new Types.ObjectId(userId)
+  const targetedObjectId = new Types.ObjectId(targetedId)
+
+  const targetedUser = await User.findById(targetedObjectId)
+  if (!targetedUser) {
+    throw new Error('User not found')
+  }
+
+  const isFollowing = targetedUser.followers.includes(userObjectId)
+
+  if (isFollowing) {
+    await User.findByIdAndUpdate(userObjectId, {
+      $pull: { following: targetedObjectId },
+    })
+    await User.findByIdAndUpdate(targetedObjectId, {
+      $pull: { followers: userObjectId },
+    })
+    return { message: 'Unfollowed successfully' }
+  } else {
+    await User.findByIdAndUpdate(userObjectId, {
+      $push: { following: targetedObjectId },
+    })
+    await User.findByIdAndUpdate(targetedObjectId, {
+      $push: { followers: userObjectId },
+    })
+    return { message: 'Followed successfully' }
+  }
+}
+
+
+
+
+
+
+
+
+const getFollowersFromDB = async (id: string) => {
+  // Find the user by ID and populate the followers field
+  const userWithFollowers = await User.findById(id)
+    .populate('followers', 'name email avatar') // Specify the fields you want from the follower
+    .select('followers')
+
+  if (!userWithFollowers) {
+    throw new Error('User not found')
+  }
+  return userWithFollowers
+}
+const getFollowingFromDB = async (id: string) => {
+  // Find the user by ID and populate the followers field
+  const userWithFollowing = await User.findById(id)
+    .populate('following', 'name email avatar') // Specify the fields you want from the follower
+    .select('followers')
+
+  if (!userWithFollowing) {
+    throw new Error('User not found')
+  }
+  return userWithFollowing
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export const userServices = {
   createUserIntoDb,
   getMyBookingsFromDb,
   getUserFromDB,
   updateUserIntoDB,
+  followUser,
+
+  getFollowersFromDB,
+  getFollowingFromDB
+
 }

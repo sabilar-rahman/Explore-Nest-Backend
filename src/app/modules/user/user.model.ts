@@ -21,6 +21,8 @@ const userSchema = new Schema<TUser, UserModel>(
       enum: ['basic', 'premium'],
       default: 'basic',
     },
+    followers: [{ type: Schema.Types.ObjectId, ref: 'user', required: true }],
+    following: [{ type: Schema.Types.ObjectId, ref: 'user', required: true }],
 
 
   },

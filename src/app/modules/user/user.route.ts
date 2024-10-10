@@ -24,4 +24,14 @@ router.put(
   userControllers.updateUser
 );
 
+
+
+
+router.post('/follow', userControllers.follow)
+
+
+
+router.get('/get-followers/:id', userControllers.getFollowers)
+router.get('/get-following/:id', userControllers.getFollowing)
+
 export const UserRoutes = router;

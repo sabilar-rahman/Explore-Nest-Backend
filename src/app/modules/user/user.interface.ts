@@ -1,5 +1,6 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/consistent-type-definitions */
-import { Model } from 'mongoose'
+import { Model, Types } from 'mongoose'
 import { USER_ROLE } from './user.constant'
 
 export type TUser = {
@@ -12,8 +13,31 @@ export type TUser = {
   image: string
   status: 'basic' | 'premium'
   _id: string
+
+
+
+
+
+
+  following: Types.ObjectId[] // Use array of ObjectIds directly without wrapping in an object
+  followers: Types.ObjectId[]
   
 }
+
+
+
+
+
+export type TFollow = {
+  userId: Types.ObjectId
+  targetedId: Types.ObjectId
+}
+
+
+
+
+
+
 
 export interface UserModel extends Model<TUser> {
   //instance methods for checking if the user exist
@@ -54,8 +78,8 @@ export interface IBooking {
   vehicleModel: string
   manufacturingYear: number
   registrationPlate: string
-  createdAt: string // ISO 8601 date string
-  updatedAt: string // ISO 8601 date string
+  createdAt: string 
+  updatedAt: string 
   __v: number
 }
 
