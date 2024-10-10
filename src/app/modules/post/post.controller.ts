@@ -100,7 +100,7 @@ const upVotePost = catchAsync(async (req, res) => {
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'Post deleted successfully',
+      message: 'Voted done successfully',
       data: result,
     })
   })
@@ -112,7 +112,33 @@ const upVotePost = catchAsync(async (req, res) => {
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'Post deleted successfully',
+      message: 'Vote removed successfully',
+      data: result,
+    })
+  })
+
+
+
+
+
+
+  const getPopularPosts = catchAsync(async (req, res) => {
+    const result = await Post.find()
+      .sort({ upVotes: -1 })
+      .limit(5)
+      .populate('author', '_id name image')
+      .select({
+        image: 0,
+        downVotes: 0,
+        commentsCount: 0,
+        category: 0,
+        comments: 0,
+      })
+  
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Top posts retrieved successfully',
       data: result,
     })
   })
@@ -129,5 +155,8 @@ export const postControllers = {
 
   upVotePost,
   downVotePost,
+
+
+  getPopularPosts,
 
 };

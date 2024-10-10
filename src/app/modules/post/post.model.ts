@@ -17,7 +17,7 @@ const PostSchema: Schema = new Schema<TPost>(
     title: { type: String, required: true },
     content: { type: String, required: true },
     image: [{ type: String }],
-    tags: { type: String, enum: ["premium", "everyone"], required: true },
+    tags: { type: String, enum: ["premium", "basic"], required: true },
     // upVotes: { type: Number, default: 0 },
     // downVotes: { type: Number, default: 0 },
     upVotes: [{ type: Schema.Types.ObjectId, ref: "user", required: true }],

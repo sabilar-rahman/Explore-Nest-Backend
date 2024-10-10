@@ -36,7 +36,8 @@ router.delete(
 router.post('/upvote/:id', postControllers.upVotePost)
 router.post('/downvote/:id', postControllers.downVotePost)
 
-
+// popular post get
+router.get('/popular', postControllers.getPopularPosts)
 
 
 export const PostRoutes = router;

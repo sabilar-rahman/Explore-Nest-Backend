@@ -16,7 +16,7 @@ app.use(
   cors({
     origin: [
       "https://turbo-shine-client-frontend.vercel.app",
-      "http://localhost:5173",
+      'http://localhost:3000',
     ],
     credentials: true,
     // Allow cookies, authorization headers with the same origin, and credentials

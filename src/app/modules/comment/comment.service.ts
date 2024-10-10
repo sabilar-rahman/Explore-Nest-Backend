@@ -21,7 +21,10 @@ const commentIntoPost = async (id: string, payload: TComment) => {
 };
 
 const getCommentsByPostFromDB = async (id: string) => {
-  const result = await Comment.find({ postId: id });
+  const result = await Comment.find({ postId: id }).populate(
+    "userId",
+    "_id name image"
+  );
   return result;
 };
 
@@ -77,7 +80,7 @@ const deleteCommentFromDB = async (id: string, userId: string) => {
     throw new Error("Post not found");
   }
 
-  // Decrement commentsCount 
+  // Decrement commentsCount
   post.commentsCount = (post.commentsCount || 0) - 1;
 
   // Save the updated post

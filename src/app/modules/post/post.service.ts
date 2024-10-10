@@ -1,5 +1,5 @@
 import { Types } from "mongoose";
-import {  TPost } from "./post.interface";
+import { TPost } from "./post.interface";
 import Post from "./post.model";
 
 const createPostIntoDB = async (payload: TPost) => {
@@ -44,56 +44,60 @@ const updatePostIntoDB = async (id: string, payload: Partial<TPost>) => {
   return result;
 };
 
-
-
-
-
 const upVotePostIntoDB = async (id: string, userId: string) => {
-    const postData = await Post.findById(id)
-    if (!postData) {
-      throw new Error('Post not available!')
-    }
-    const userObjectId = new Types.ObjectId(userId)
-    const postObjectId = new Types.ObjectId(id)
-    const isVoted = postData.upVotes.includes(userObjectId)
-    if (isVoted) {
-      const result = await Post.findByIdAndUpdate(postObjectId, {
-        $pull: { upVotes: userId },
-      })
-      return result
-    } else {
-      const result = await Post.findByIdAndUpdate(userObjectId, {
-        $push: { upVotes: userId },
-      })
-      return result
-    }
+  const postData = await Post.findById(id);
+  if (!postData) {
+    throw new Error("Post not available!");
   }
-  const downVotePostIntoDB = async (id: string, userId: string) => {
-    const postData = await Post.findById(id)
-    if (!postData) {
-      throw new Error('Post not available!')
-    }
-    const userObjectId = new Types.ObjectId(userId)
-    const postObjectId = new Types.ObjectId(id)
-    const isVoted = postData.upVotes.includes(userObjectId)
-    if (isVoted) {
-      const result = await Post.findByIdAndUpdate(postObjectId, {
-        $pull: { downVotes: userId },
-      })
-      return result
-    } else {
-      const result = await Post.findByIdAndUpdate(userObjectId, {
-        $push: { downVotes: userId },
-      })
-      return result
-    }
+  const userObjectId = new Types.ObjectId(userId);
+  // const postObjectId = new Types.ObjectId(id)
+  const isVoted = postData.upVotes.includes(userObjectId);
+  if (isVoted) {
+    //   const result = await Post.findByIdAndUpdate(postObjectId, {
+    //     $pull: { upVotes: userId },
+
+    const result = await Post.findByIdAndUpdate(id, {
+      $pull: { upVotes: userId },
+    });
+    return result;
+  } else {
+    //   const result = await Post.findByIdAndUpdate(userObjectId, {
+    //     $push: { upVotes: userId },
+    const result = await Post.findByIdAndUpdate(id, {
+      $push: { upVotes: userId },
+    });
+    return result;
   }
+};
+const downVotePostIntoDB = async (id: string, userId: string) => {
+  const postData = await Post.findById(id);
+  if (!postData) {
+    throw new Error("Post not available!");
+  }
+  const userObjectId = new Types.ObjectId(userId);
+  //   const postObjectId = new Types.ObjectId(id);
+  const isVoted = postData.upVotes.includes(userObjectId);
+  if (isVoted) {
+    // const result = await Post.findByIdAndUpdate(postObjectId, {
+    //   $pull: { downVotes: userId },
+    // });
+    const result = await Post.findByIdAndUpdate(id, {
+      $pull: { downVotes: userId },
+    });
 
+    return result;
+  } else {
+    // const result = await Post.findByIdAndUpdate(userObjectId, {
+    //   $push: { downVotes: userId },
+    // });
 
+    const result = await Post.findByIdAndUpdate(id, {
+      $push: { downVotes: userId },
+    });
 
-
-
-
+    return result;
+  }
+};
 
 export const postServices = {
   createPostIntoDB,
@@ -103,10 +107,6 @@ export const postServices = {
 
   updatePostIntoDB,
 
-
-
   upVotePostIntoDB,
   downVotePostIntoDB,
-
-
 };
