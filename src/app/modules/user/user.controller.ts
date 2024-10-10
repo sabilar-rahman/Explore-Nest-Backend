@@ -9,130 +9,74 @@ import catchAsync from "../utils/catchAsync";
 import sendResponse from "../utils/sendResponse";
 import { TUser } from "./user.interface";
 
-// const createUser = catchAsync(async (req, res) => {
-//   try {
-//     const user = req.body;
-//     const password = user.password;
-
-
-//     const result = await UserServices.createUserIntoDB(password, user);
-
-//     sendResponse(res, {
-//       statusCode: httpStatus.OK,
-//       success: true,
-//       message: "User created successfully",
-//       data: result,
-//     });
-//   } catch (err) {
-//     console.log(err);
-//   }
-// });
-
-
 const createUser = catchAsync(async (req, res) => {
-  const userInfo = req.body; // User information from request body
-  const files = req.files as { img?: Express.Multer.File[] }; // Handling uploaded files
-  const userImage = files?.img?.[0]?.path; // Extracting avatar file path
-  const password = userInfo.password;
-  // Constructing the user data, adding the avatar path if available
-  const user = {
+  const userData = req.body
+  const userInfo = req.body
+  const files = req.files as { avatar?: Express.Multer.File[] }
+  const userAvatar = files?.avatar?.[0]?.path
+
+  const userData: TUser = {
     ...userInfo,
-    img: userImage,
-  };
+    avatar: userAvatar,
+  }
 
-    const result = await UserServices.createUserIntoDB(password, user);
-
-    sendResponse(res, {
-      statusCode: httpStatus.OK,
-      success: true,
-      message: "User created successfully",
-      data: result,
-    });
-  
-});
-
-const loginUser = catchAsync(async (req, res) => {
-  const result = await UserServices.loginUser(req.body);
-  const { token } = result;
-  const user = result.user;
-  const { refreshToken } = result;
-  console.log(refreshToken);
-  res.cookie("refreshToken", refreshToken, {
-    secure: config.NODE_ENV === "production",
-    httpOnly: true,
-  });
-  res.status(200).json({
-    success: true,
-    statusCode: httpStatus.OK,
-    message: "User logged in successfully!",
-    token,
-    data: user,
-  });
-});
-
-const refreshToken = catchAsync(async (req, res) => {
-  const { refreshToken } = req.cookies;
-  const result = await UserServices.refreshToken(refreshToken);
-
+  const result = await userServices.createUserIntoDb(userData)
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Access token is retrieved succesfully!",
+    message: 'User registered successfully',
     data: result,
-  });
-});
-
-const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const users = await UserServices.getAllUsers();
-    return res.status(200).json({
-      success: true,
-      data: users,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
-// Controller to update a user's role
-const updateUserRole = catchAsync(async (req, res) => {
-  try {
-    const { userId } = req.params; // Get userId from route parameters
-    const { role } = req.body; // Get new role from request body
-
-    const updatedUser = await UserServices.updateUserRole(userId, role);
-
-    return res.status(200).json({
-      success: true,
-      message: "User role updated successfully",
-      data: updatedUser,
-    });
-  } catch (error) {
-    console.error(error);
-  }
-});
-
-const updateUserInfo = catchAsync(async (req, res) => {
-  const userId = req.params.id;
-  // Get user ID from URL parameters
-  const updatedData = req.body; // Get updated data from request body
-
-  // Call the service to update user information
-  const user = await UserServices.updateUserInfo(userId, updatedData);
-
-  // If user is found and updated, send a successful response
-  res.status(httpStatus.OK).json({
+  })
+})
+const getAllUser = catchAsync(async (req, res) => {
+  const result = await User.find()
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
     success: true,
-    message: "User updated successfully",
-    data: user, // Return the updated user data
-  });
-});
-
-export const UserControllers = {
+    message: 'User retrieved successfully',
+    data: result,
+  })
+})
+const getUserByEmail = catchAsync(async (req, res) => {
+  const token = req.headers.authorization
+  const { email } = getUserInfoFromToken(token as string)
+  const result = await userServices.getUserFromDB(email)
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User retrieved successfully',
+    data: result,
+  })
+})
+const updateUser = catchAsync(async (req, res) => {
+  const { id } = req.params
+  const payload = req.body
+  const result = await userServices.updateUserIntoDB(id, payload)
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User updated successfully',
+    data: result,
+  })
+})
+const getMyBookings = catchAsync(async (req, res) => {
+  const token = req.headers.authorization
+  const { email } = getUserInfoFromToken(token as string)
+  const result = await userServices.getMyBookingsFromDb(email)
+  if (!result || result?.length === 0) {
+    return handleNoDataResponse(res)
+  }
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User bookings retrieved successfully',
+    data: result,
+  })
+})
+export const userControllers = {
   createUser,
-  loginUser,
-  refreshToken,
-  getAllUsers,
-  updateUserRole,
-  updateUserInfo,
-};
+  getMyBookings,
+  getAllUser,
+  getUserByEmail,
+  updateUser,
+}

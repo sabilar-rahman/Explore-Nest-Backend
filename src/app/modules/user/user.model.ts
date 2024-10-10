@@ -1,73 +1,55 @@
-import { model, Schema } from "mongoose";
-
-import { TUser, UserModel } from "./user.interface";
-import config from "../../config";
-import bcrypt from "bcrypt";
+import { Schema, model } from 'mongoose'
+import bcrypt from 'bcrypt'
+import { TUser, UserModel } from './user.interface'
+import config from '../../config'
 
 const userSchema = new Schema<TUser, UserModel>(
   {
-    name: {
-      type: String,
-      required: true,
-    },
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    password: {
-      type: String,
-      required: true,
-      select: false,
-    },
-    phone: {
-      type: String,
-      required: true,
-    },
-    img: {
-      type: String,
-      required: true,
-    },
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    phone: { type: String, required: true },
     role: {
       type: String,
-      enum: ["admin", "user"],
-      required: true,
+      enum: ['admin', 'user'],
+      default: 'user',
     },
-    address: {
-      type: String,
-      required: true,
-    },
+    avatar: { type: String, required: true },
+    address: { type: String, required: false },
   },
   {
     timestamps: true,
-  }
-);
+  },
+)
 
-userSchema.pre("findOneAndUpdate", async function (next) {
-  const update = this.getUpdate() as Partial<TUser>;
+userSchema.pre('save', async function (next) {
+  // eslint-disable-next-line @typescript-eslint/no-this-alias
+  const user = this // doc
+  // hashing password and save into DB
+  user.password = await bcrypt.hash(
+    user.password,
+    Number(config.bcrypt_salt_rounds),
+  )
+  next()
+})
 
-  // Hash the password if it's being updated and exists in the update data
-  if (update.password) {
-    update.password = await bcrypt.hash(
-      update.password,
-      Number(config.bcrypt_salt_rounds)
-    );
-  }
+userSchema.methods.toJSON = function () {
+  const userObject = this.toObject()
 
-  next();
-});
+  delete userObject.password
 
-// Static method to check if user exists and retrieve password
-userSchema.statics.isUserExists = async function (email: string) {
-  return await this.findOne({ email }).select("+password");
-};
+  return userObject
+}
 
-// Static method to compare plain text password with hashed password
+// Static method to find user by email
+userSchema.statics.isUserExistsByEmail = async function (email: string) {
+  return await this.findOne({ email })
+}
 userSchema.statics.isPasswordMatched = async function (
-  plainTextPassword: string,
-  hashedPassword: string
+  plainTextPassword,
+  hashedPassword,
 ) {
-  return await bcrypt.compare(plainTextPassword, hashedPassword);
-};
+  return await bcrypt.compare(plainTextPassword, hashedPassword)
+}
 
-export const User = model<TUser, UserModel>("User", userSchema);
+export const User = model<TUser, UserModel>('user', userSchema)

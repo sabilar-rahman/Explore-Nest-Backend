@@ -1,55 +1,88 @@
-import { z } from "zod";
+import { z } from 'zod'
 
 const createUserValidationSchema = z.object({
-  name: z.string().optional(),
-  email: z.string().email().optional(),
-  password: z.string().min(8).optional(),
-  phone: z.string().min(10).optional(),
-  img: z.string().optional(),
-  role: z.enum(["admin", "user"]).optional(),
-  address: z.string().min(1).optional(),
-  isDeleted: z.boolean().optional(),
-});
-
-const loginValidationSchema = z.object({
   body: z.object({
-    email: z.string({ required_error: "Email is required" }),
-    password: z.string({ required_error: "Password is required" }),
-  }),
-});
-
-const refreshTokenValidationSchema = z.object({
-  cookies: z.object({
-    refreshToken: z.string({
-      required_error: "Refresh token is required!",
+    name: z
+      .string({
+        invalid_type_error: 'Name must be a string',
+      })
+      .min(1, 'Name is required'),
+    email: z.string({
+      invalid_type_error: 'Email must be a string',
     }),
+    avatar: z
+      .string({
+        invalid_type_error: 'avatar is required zod',
+      })
+      .email('Invalid email address'),
+    password: z
+      .string({
+        invalid_type_error: 'Password must be a string',
+      })
+      .min(6, 'Password must be at least 6 characters')
+      .max(20, 'Password cannot exceed 20 characters'),
+    phone: z
+      .string({
+        invalid_type_error: 'Phone number must be a string',
+      })
+      .min(10, 'Phone number must be at least 10 characters')
+      .max(15, 'Phone number cannot exceed 15 characters'),
+    role: z
+      .enum(['admin', 'user'], {
+        invalid_type_error: 'Role must be either "admin" or "user"',
+      })
+      .default('user'),
+    address: z
+      .string({
+        invalid_type_error: 'Address must be a string',
+      })
+      .min(1, 'Address is required'),
   }),
-});
+})
 
-export const updateUserRoleValidationSchema = z.object({
-  body: z
-    .object({
-      role: z.enum(["user", "admin"], {
-        required_error: "Role is required",
-      }),
-    })
-    .optional(),
-});
 const updateUserValidationSchema = z.object({
-  name: z.string().optional(),
-  email: z.string().email().optional(),
-  password: z.string().min(8).optional(),
-  phone: z.string().min(10).optional(),
-  img: z.string().optional(),
-  role: z.enum(["admin", "user"]).optional(),
-  address: z.string().min(1).optional(),
-  isDeleted: z.boolean().optional(),
-});
+  body: z.object({
+    name: z
+      .string({
+        invalid_type_error: 'Name must be a string',
+      })
+      .min(1, 'Name is required')
+      .optional(),
+    email: z
+      .string({
+        invalid_type_error: 'Email must be a string',
+      })
+      .email('Invalid email address')
+      .optional(),
+    password: z
+      .string({
+        invalid_type_error: 'Password must be a string',
+      })
+      .min(6, 'Password must be at least 6 characters')
+      .max(20, 'Password cannot exceed 20 characters')
+      .optional(),
+    phone: z
+      .string({
+        invalid_type_error: 'Phone number must be a string',
+      })
+      .min(10, 'Phone number must be at least 10 characters')
+      .max(15, 'Phone number cannot exceed 15 characters')
+      .optional(),
+    role: z
+      .enum(['admin', 'user'], {
+        invalid_type_error: 'Role must be either "admin" or "user"',
+      })
+      .optional(),
+    address: z
+      .string({
+        invalid_type_error: 'Address must be a string',
+      })
+      .min(1, 'Address is required')
+      .optional(),
+  }),
+})
 
-export const userValidation = {
+export const UserValidations = {
   createUserValidationSchema,
-  loginValidationSchema,
-  refreshTokenValidationSchema,
-  updateUserRoleValidationSchema,
   updateUserValidationSchema,
-};
+}
