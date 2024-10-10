@@ -27,6 +27,10 @@ app.use(
 app.use(express.json()); // This will parse incoming JSON requests
 app.use(cookieParser());
 
+app.use(express.urlencoded({ extended: true }))
+
+
+
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello!, This is Explore Nest Backend washing system.");
 });

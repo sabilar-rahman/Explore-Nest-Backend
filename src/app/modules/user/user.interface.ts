@@ -9,7 +9,7 @@ export type TUser = {
   phone: string
   role: 'admin' | 'user'
   address?: string
-  avatar: string
+  image: string
 }
 
 export interface UserModel extends Model<TUser> {
