@@ -5,6 +5,7 @@ import { UserControllers } from "./user.controller";
 
 import { userValidation } from "./user.validation";
 import ValidateRequest from "../../middlewares/ValidateRequest";
+import { multerUpload } from "../../config/multer.config";
 
 
 
@@ -33,7 +34,7 @@ router.put(
   UserControllers.updateUserInfo
 );
 router.post(
-  "/signup",
+  "/signup", multerUpload.single("img"),
   ValidateRequest(userValidation.createUserValidationSchema),
   UserControllers.createUser
 );

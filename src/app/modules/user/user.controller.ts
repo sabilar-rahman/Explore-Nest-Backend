@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import httpStatus from "http-status";
 // import catchAsync from "../../utils/catchAsync";
 // import sendResponse from "../../utils/sendResponse";
@@ -6,23 +7,49 @@ import { NextFunction, Request, Response } from "express";
 import config from "../../config";
 import catchAsync from "../utils/catchAsync";
 import sendResponse from "../utils/sendResponse";
+import { TUser } from "./user.interface";
 
-const createUser = async (req: Request, res: Response) => {
-  try {
-    const user = req.body;
-    const password = user.password;
+// const createUser = catchAsync(async (req, res) => {
+//   try {
+//     const user = req.body;
+//     const password = user.password;
+
+
+//     const result = await UserServices.createUserIntoDB(password, user);
+
+//     sendResponse(res, {
+//       statusCode: httpStatus.OK,
+//       success: true,
+//       message: "User created successfully",
+//       data: result,
+//     });
+//   } catch (err) {
+//     console.log(err);
+//   }
+// });
+
+
+const createUser = catchAsync(async (req, res) => {
+  const userInfo = req.body; // User information from request body
+  const files = req.files as { img?: Express.Multer.File[] }; // Handling uploaded files
+  const userImage = files?.img?.[0]?.path; // Extracting avatar file path
+  const password = userInfo.password;
+  // Constructing the user data, adding the avatar path if available
+  const user = {
+    ...userInfo,
+    img: userImage,
+  };
+
     const result = await UserServices.createUserIntoDB(password, user);
 
-    res.status(200).json({
-      success: true,
+    sendResponse(res, {
       statusCode: httpStatus.OK,
-      message: "User registered successfully",
+      success: true,
+      message: "User created successfully",
       data: result,
     });
-  } catch (err) {
-    console.log(err);
-  }
-};
+  
+});
 
 const loginUser = catchAsync(async (req, res) => {
   const result = await UserServices.loginUser(req.body);
@@ -68,7 +95,7 @@ const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 // Controller to update a user's role
-const updateUserRole = catchAsync(async (req,res) => {
+const updateUserRole = catchAsync(async (req, res) => {
   try {
     const { userId } = req.params; // Get userId from route parameters
     const { role } = req.body; // Get new role from request body
@@ -82,15 +109,8 @@ const updateUserRole = catchAsync(async (req,res) => {
     });
   } catch (error) {
     console.error(error);
-  
   }
 });
-
-
-
-
-
-
 
 const updateUserInfo = catchAsync(async (req, res) => {
   const userId = req.params.id;
