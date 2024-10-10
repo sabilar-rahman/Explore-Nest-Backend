@@ -82,7 +82,7 @@ const followUser = async (payload: FollowPayload) => {
     await User.findByIdAndUpdate(targetedObjectId, {
       $pull: { followers: userObjectId },
     })
-    return { message: 'Unfollowed successfully' }
+    return  'Unfollowed successfully' 
   } else {
     await User.findByIdAndUpdate(userObjectId, {
       $push: { following: targetedObjectId },
@@ -90,7 +90,7 @@ const followUser = async (payload: FollowPayload) => {
     await User.findByIdAndUpdate(targetedObjectId, {
       $push: { followers: userObjectId },
     })
-    return { message: 'Followed successfully' }
+    return  'Followed successfully' 
   }
 }
 
@@ -129,8 +129,26 @@ const getFollowingFromDB = async (id: string) => {
 
 
 
+const updateUserRoleIntoDB = async (id: string, payload: Partial<TUser>) => {
+  const result = await User.findByIdAndUpdate(id, payload, {
+    new: true,
+    runValidators: true,
+  })
+  return result
+}
 
 
+
+const getUserByIdFromDB = async (id: string) => {
+  const result = await User.findById(id).populate(
+    'following followers',
+    '_id name image',
+  )
+  if (!result) {
+    throw new Error('User not found!')
+  }
+  return result
+}
 
 
 
@@ -148,6 +166,14 @@ export const userServices = {
   followUser,
 
   getFollowersFromDB,
-  getFollowingFromDB
+  getFollowingFromDB,
+
+
+
+  updateUserRoleIntoDB,
+
+
+
+  getUserByIdFromDB
 
 }

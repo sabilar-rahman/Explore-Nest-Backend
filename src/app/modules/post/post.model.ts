@@ -16,7 +16,7 @@ const PostSchema: Schema = new Schema<TPost>(
   {
     title: { type: String, required: true },
     content: { type: String, required: true },
-    image: [{ type: String }],
+    image: { type: String ,required: false },
     tags: { type: String, enum: ["premium", "basic"], required: true },
     // upVotes: { type: Number, default: 0 },
     // downVotes: { type: Number, default: 0 },
@@ -38,6 +38,8 @@ const PostSchema: Schema = new Schema<TPost>(
       ],
       default: "adventure",
     },
+
+    isActive: { type: Boolean, default: true },
   },
   {
     timestamps: true,

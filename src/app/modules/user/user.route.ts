@@ -39,4 +39,12 @@ router.get('/get-following/:id', userControllers.getFollowing)
 
 router.get('/user/:email', userControllers.getSingleUser)
 
+// get user by id 
+router.get('/user-by-id/:id', userControllers.getUserById)
+
+
+// Change user role
+router.put('/update-user-role/:id', userControllers.updateUserRole)
+
+
 export const UserRoutes = router;

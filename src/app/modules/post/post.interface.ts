@@ -47,7 +47,7 @@ type TCategory =
 export interface TPost {
   title: string;
   content: string;
-  image?: string[];
+  image?: string;
   tags: "premium" | "everyone";
   comments?: TComment[];
   commentsCount?: number;
@@ -58,4 +58,6 @@ export interface TPost {
 
   author: Types.ObjectId;
   category: TCategory;
+
+  isActive: boolean
 }

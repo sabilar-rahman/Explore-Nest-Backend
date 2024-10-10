@@ -13,18 +13,35 @@ router.get("/all-posts", postControllers.getAllPosts);
 
 router.get('/single-post/:id', postControllers.getSinglePost)
 
+// router.post(
+//   "/create-post",
+//   multerUpload.fields([{ name: "image" }]),
+//   parseBody,
+//   postControllers.createPost
+// );
+
+
 router.post(
-  "/create-post",
-  multerUpload.fields([{ name: "image" }]),
-  parseBody,
-  postControllers.createPost
-);
+    '/create-post',
+    multerUpload.single('image'),
+    parseBody,
+    postControllers.createPost,
+  )
+
+// router.put(
+//   "/update-post/:id",
+//   auth(USER_ROLE.admin, USER_ROLE.user),
+//   postControllers.updatePost
+// );
 
 router.put(
-  "/update-post/:id",
-  auth(USER_ROLE.admin, USER_ROLE.user),
-  postControllers.updatePost
-);
+    '/update-post/:id',
+    multerUpload.single('image'),
+    parseBody,
+    postControllers.updatePost,
+  )
+
+
 
 router.delete(
   "/delete-post/:id",
@@ -42,6 +59,10 @@ router.get('/popular', postControllers.getPopularPosts)
 
 // post by authors
 router.get('/posts-by-author/:id', postControllers.getPostsByAuthor)
+
+
+// active & inactive
+router.get('/all-active-inactive-posts', postControllers.getAllAcInacPosts)
 
 
 export const PostRoutes = router;

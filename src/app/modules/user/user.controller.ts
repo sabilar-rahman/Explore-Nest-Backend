@@ -49,6 +49,17 @@ const getUserByEmail = catchAsync(async (req, res) => {
   });
 });
 
+const getUserById = catchAsync(async (req, res) => {
+  const { id } = req.params
+  const result = await userServices.getUserByIdFromDB(id)
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User retrieved successfully',
+    data: result,
+  })
+})
+
 
 
 
@@ -173,7 +184,22 @@ const getFollowing = catchAsync(async (req, res) => {
 
 
 
+// role update
 
+
+const updateUserRole = catchAsync(async (req, res) => {
+  const { id } = req.params
+  const userInfo = req.body
+  console.log(id, userInfo)
+  const result = await userServices.updateUserIntoDB(id, userInfo)
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User updated successfully',
+    data: result,
+  })
+})
 
 
 
@@ -197,12 +223,18 @@ export const userControllers = {
   getMyBookings,
   getAllUser,
   getUserByEmail,
-  updateUser,
+  getUserById,
 
-  
+
+  updateUser,
   follow,
   getFollowing,
   getFollowers,
 
   getSingleUser,
+
+
+  updateUserRole,
+
+
 };
