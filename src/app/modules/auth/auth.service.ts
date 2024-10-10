@@ -41,9 +41,8 @@ const loginUser = async (payload: TLoginUser) => {
       user,
     }
   }
-
-
-const hashPassword = async (password: string): Promise<string> => {
+  
+  const hashPassword = async (password: string): Promise<string> => {
     return await bcrypt.hash(password, Number(config.bcrypt_salt_rounds))
   }
   
@@ -79,12 +78,8 @@ const hashPassword = async (password: string): Promise<string> => {
     return changeUserPassword
   }
   
-
-
-
-
-export const AuthServices = {
-  loginUser,
-  changePasswordIntoDB,
-  recoverPasswordIntoDB
-}
+  export const AuthServices = {
+    loginUser,
+    recoverPasswordIntoDB,
+    changePasswordIntoDB,
+  }

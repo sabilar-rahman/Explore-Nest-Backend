@@ -6,17 +6,17 @@ import { getUserInfoFromToken } from '../utils/getUserInfoFromToken'
 
 
 const loginUser = catchAsync(async (req, res) => {
-  const result = await AuthServices.loginUser(req.body)
-  const { accessToken, user } = result
-
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: 'User logged in successfully',
-    accessToken: accessToken,
-    data: user,
+    const result = await AuthServices.loginUser(req.body)
+    const { accessToken, user } = result
+  
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'User logged in successfully',
+      accessToken: accessToken,
+      data: user,
+    })
   })
-})
 
 
 const passwordRecover = catchAsync(async (req, res) => {

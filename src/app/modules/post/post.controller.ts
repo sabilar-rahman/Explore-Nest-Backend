@@ -1,0 +1,108 @@
+import httpStatus from "http-status";
+
+import { TPost } from "./post.interface";
+import { TImageFiles } from "../../interface/image.interface";
+import { postServices } from "./post.service";
+import catchAsync from "../utils/catchAsync";
+import sendResponse from "../utils/sendResponse";
+import Post from "./post.model";
+
+const createPost = catchAsync(async (req, res) => {
+  const postInfo = req.body;
+  const files = req.files as TImageFiles;
+  const postImages = files?.image;
+
+  const postData: TPost = {
+    ...postInfo,
+    image: postImages.map((image) => image.path),
+  };
+
+  const result = await postServices.createPostIntoDB(postData);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Post created successfully",
+    data: result,
+  });
+});
+
+const getAllPosts = catchAsync(async (req, res) => {
+  const result = await postServices.getAllPostsFromDB();
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Post retrieved successfully",
+    data: result,
+  });
+});
+
+const getSinglePost = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await postServices.getSinglePostFromDB(id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Post retrieved successfully",
+    data: result,
+  });
+});
+
+const updatePost = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const postInfo = req.body;
+
+  const files = req.files as TImageFiles;
+  const postImages = files?.image;
+
+  const payload: Partial<TPost> = {
+    ...postInfo,
+    ...(postImages ? { image: postImages } : {}),
+  };
+
+  const result = await postServices.updatePostIntoDB(id, payload);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Post updated successfully",
+    data: result,
+  });
+});
+
+const deletePost = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await Post.findByIdAndDelete(id);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Post deleted successfully",
+    data: result,
+  });
+});
+
+// comment section
+
+const postComment = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const payload = req.body;
+  const result = postServices.commentIntoPost(id, payload);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Commented successfully",
+    data: result,
+  });
+});
+
+export const postControllers = {
+  createPost,
+  getAllPosts,
+  getSinglePost,
+  updatePost,
+  deletePost,
+
+  postComment,
+};
