@@ -26,6 +26,18 @@ const PostSchema: Schema = new Schema<TPost>(
     comments: [CommentSchema],
     commentsCount: { type: Number, default: 0 },
     author: { type: Schema.Types.ObjectId, ref: "user", required: true },
+    category: {
+      type: String,
+      enum: [
+        "adventure",
+        "business trip",
+        "exploration",
+        "historical",
+        "beach",
+        "mountain",
+      ],
+      default: "adventure",
+    },
   },
   {
     timestamps: true,

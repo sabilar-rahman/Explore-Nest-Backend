@@ -36,6 +36,14 @@ export interface TComment {
   _id: string;
 }
 
+type TCategory =
+  | "adventure"
+  | "business trip"
+  | "exploration"
+  | "historical"
+  | "beach"
+  | "mountain";
+
 export interface TPost {
   title: string;
   content: string;
@@ -49,4 +57,5 @@ export interface TPost {
   downVotes: Types.ObjectId[];
 
   author: Types.ObjectId;
+  category: TCategory;
 }
