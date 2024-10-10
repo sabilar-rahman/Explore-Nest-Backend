@@ -5,6 +5,7 @@ import catchAsync from "../modules/utils/catchAsync";
 
 import { TUserRole } from "../modules/user/user.interface";
 import httpStatus from "http-status";
+import { User } from "../modules/user/user.model";
 
 
 

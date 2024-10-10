@@ -40,4 +40,8 @@ router.post('/downvote/:id', postControllers.downVotePost)
 router.get('/popular', postControllers.getPopularPosts)
 
 
+// post by authors
+router.get('/posts-by-author/:id', postControllers.getPostsByAuthor)
+
+
 export const PostRoutes = router;

@@ -34,4 +34,9 @@ router.post('/follow', userControllers.follow)
 router.get('/get-followers/:id', userControllers.getFollowers)
 router.get('/get-following/:id', userControllers.getFollowing)
 
+
+
+
+router.get('/user/:email', userControllers.getSingleUser)
+
 export const UserRoutes = router;

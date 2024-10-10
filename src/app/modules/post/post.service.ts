@@ -1,6 +1,7 @@
-import { Types } from "mongoose";
+import { SortOrder, Types } from "mongoose";
 import { TPost } from "./post.interface";
 import Post from "./post.model";
+import { PostQueryParams } from "./post.utils";
 
 const createPostIntoDB = async (payload: TPost) => {
   const result = await Post.create(payload);
@@ -16,12 +17,69 @@ const createPostIntoDB = async (payload: TPost) => {
 //   return result;
 // };
 
-const getAllPostsFromDB = async () => {
-  const result = await Post.find()
-    .populate("author", "_id name email image")
-    .select({ comments: 0 });
-  return result;
-};
+// const getAllPostsFromDB = async () => {
+//   const result = await Post.find()
+//     .populate("author", "_id name email image")
+//     .select({ comments: 0 });
+//   return result;
+// };
+
+
+const getAllPostsFromDB = async (query: PostQueryParams) => {
+    const { searchTerm, sort, category, tag } = query
+  
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const filter: any = {}
+  
+    // Search by title or content
+    if (searchTerm) {
+      filter.$or = [
+        { title: { $regex: searchTerm, $options: 'i' } },
+        { content: { $regex: searchTerm, $options: 'i' } },
+      ]
+    }
+  
+    // Filter by category
+    if (category) {
+      filter.category = category
+    }
+  
+    // Filter by tag
+    if (tag) {
+      filter.tags = tag
+    }
+  
+    // Declare sortOption as a dynamic object with SortOrder values
+    let sortOption: Record<string, SortOrder> = { createdAt: -1 }
+  
+    // Sort by most votes (i.e., upVotes array length)
+    if (sort === 'vote') {
+      sortOption = { upVotes: -1 }
+    }
+  
+    const result = await Post.find(filter)
+      .populate('author', '_id name email image')
+      .sort(sortOption)
+      .select({ comments: 0 })
+  
+    return result
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const getSinglePostFromDB = async (id: string) => {
   const post = await Post.findById(id)
@@ -35,6 +93,10 @@ const getSinglePostFromDB = async (id: string) => {
   }
   return post;
 };
+
+
+
+
 
 const updatePostIntoDB = async (id: string, payload: Partial<TPost>) => {
   const result = await Post.findByIdAndUpdate(id, payload, {
@@ -99,6 +161,21 @@ const downVotePostIntoDB = async (id: string, userId: string) => {
   }
 };
 
+
+
+const getPostsByAuthorFromDB = async (id: string) => {
+    const result = await Post.find({ author: id }).select({ comments: 0 })
+    return result
+  }
+
+
+
+
+
+
+
+
+
 export const postServices = {
   createPostIntoDB,
   getAllPostsFromDB,
@@ -109,4 +186,8 @@ export const postServices = {
 
   upVotePostIntoDB,
   downVotePostIntoDB,
+
+
+
+  getPostsByAuthorFromDB,
 };

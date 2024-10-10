@@ -28,16 +28,50 @@ const createPost = catchAsync(async (req, res) => {
   });
 });
 
-const getAllPosts = catchAsync(async (req, res) => {
-  const result = await postServices.getAllPostsFromDB();
+// const getAllPosts = catchAsync(async (req, res) => {
+//   const result = await postServices.getAllPostsFromDB();
 
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: "Post retrieved successfully",
-    data: result,
-  });
-});
+//   sendResponse(res, {
+//     statusCode: httpStatus.OK,
+//     success: true,
+//     message: "Post retrieved successfully",
+//     data: result,
+//   });
+// });
+
+
+const getAllPosts = catchAsync(async (req, res) => {
+    
+    const query = req.query
+    const result = await postServices.getAllPostsFromDB(query)
+  
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Posts retrieved successfully',
+      data: result,
+    })
+  })
+  const getPostsByAuthor = catchAsync(async (req, res) => {
+    const { id } = req.params
+    const result = await postServices.getPostsByAuthorFromDB(id)
+  
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Posts retrieved successfully',
+      data: result,
+    })
+  })
+
+
+
+
+
+
+
+
+
 
 const getSinglePost = catchAsync(async (req, res) => {
   const { id } = req.params;
@@ -158,5 +192,9 @@ export const postControllers = {
 
 
   getPopularPosts,
+
+  getPostsByAuthor,
+
+  
 
 };

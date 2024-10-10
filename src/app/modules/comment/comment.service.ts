@@ -21,10 +21,9 @@ const commentIntoPost = async (id: string, payload: TComment) => {
 };
 
 const getCommentsByPostFromDB = async (id: string) => {
-  const result = await Comment.find({ postId: id }).populate(
-    "userId",
-    "_id name image"
-  );
+  const result = await Comment.find({ postId: id })
+    .populate("userId", "_id name image")
+    .sort({ createdAt: -1 });
   return result;
 };
 
