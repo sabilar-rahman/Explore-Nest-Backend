@@ -25,26 +25,25 @@
 // }
 
 // export interface TPopulatedPost extends Omit<TPost, 'author'> {
-//   author: TAuthor 
+//   author: TAuthor
 // }
 
-
-
-import { Types } from 'mongoose'
+import { Types } from "mongoose";
 
 export interface TComment {
-  userId: string
-  name: string
-  commenter: Types.ObjectId
-  content: string
+  commenter: Types.ObjectId;
+  content: string;
+  _id: string;
 }
+
 export interface TPost {
-  title: string
-  content: string
-  image?: string[]
-  tags: 'premium' | 'everyone'
-  comments?: TComment[]
-  upVotes?: number
-  downVotes?: number
-  author: Types.ObjectId
+  title: string;
+  content: string;
+  image?: string[];
+  tags: "premium" | "everyone";
+  comments?: TComment[];
+  commentsCount?: number;
+  upVotes?: number;
+  downVotes?: number;
+  author: Types.ObjectId;
 }

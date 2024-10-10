@@ -16,6 +16,13 @@ const userSchema = new Schema<TUser, UserModel>(
     },
     image: { type: String},
     address: { type: String, required: false },
+    status: {
+      type: String,
+      enum: ['basic', 'premium'],
+      default: 'basic',
+    },
+
+
   },
   {
     timestamps: true,

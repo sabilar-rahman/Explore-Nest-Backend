@@ -10,6 +10,8 @@ export type TUser = {
   role: 'admin' | 'user'
   address?: string
   image: string
+  status: 'basic' | 'premium'
+  _id: string
   
 }
 

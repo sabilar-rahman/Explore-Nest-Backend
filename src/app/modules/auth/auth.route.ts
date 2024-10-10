@@ -36,4 +36,8 @@ router.put(
   auth(USER_ROLE.admin, USER_ROLE.user),
   AuthControllers.changePassword,
 )
+
+
+
+
 export const AuthRoutes = router

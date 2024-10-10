@@ -33,11 +33,7 @@ router.delete(
 );
 
 
-router.post(
-    '/comment/:id',
-    auth(USER_ROLE.admin, USER_ROLE.user),
-    postControllers.postComment,
-  )
+
 
 
 

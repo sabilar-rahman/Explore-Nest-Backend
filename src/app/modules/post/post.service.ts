@@ -1,4 +1,4 @@
-import { TComment, TPost } from "./post.interface";
+import {  TPost } from "./post.interface";
 import Post from "./post.model";
 
 const createPostIntoDB = async (payload: TPost) => {
@@ -16,7 +16,9 @@ const createPostIntoDB = async (payload: TPost) => {
 // };
 
 const getAllPostsFromDB = async () => {
-  const result = await Post.find().populate("author", "_id name email image");
+  const result = await Post.find()
+    .populate("author", "_id name email image")
+    .select({ comments: 0 });
   return result;
 };
 
@@ -41,28 +43,7 @@ const updatePostIntoDB = async (id: string, payload: Partial<TPost>) => {
   return result;
 };
 
-// comment section start from here
 
-const commentIntoPost = async (id: string, payload: TComment) => {
-  const post = await Post.findById(id);
-  console.log("post", post);
-  if (!post) {
-    throw new Error("Post not found");
-  }
-
-  // Initialize comments if it is undefined
-  if (!post.comments) {
-    post.comments = [];
-  }
-
-  // Push the new comment into the comments array
-  post.comments.push(payload);
-
-  // Save the updated post
-  const updatedPost = await post.save();
-
-  return updatedPost;
-};
 
 export const postServices = {
   createPostIntoDB,
@@ -72,5 +53,5 @@ export const postServices = {
 
   updatePostIntoDB,
 
-  commentIntoPost,
+
 };
