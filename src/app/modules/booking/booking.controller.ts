@@ -2,8 +2,9 @@ import httpStatus from "http-status";
 
 import catchAsync from "../utils/catchAsync";
 import { getUserInfoFromToken } from "../utils/getUserInfoFromToken";
-import { bookingServices } from "./booking.service";
+// import { BookingServices, bookingServices } from "./booking.service";
 import sendResponse from "../utils/sendResponse";
+import { BookingServices } from "./booking.service";
 
 
 // ============================================================
@@ -36,7 +37,7 @@ const createBooking = catchAsync(async (req, res) => {
 
   const { email } = getUserInfoFromToken(token as string)
 
-  const result = await bookingServices.createBookingIntoDB(email, bookingData)
+  const result = await BookingServices.createBookingIntoDB(email, bookingData)
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -48,33 +49,33 @@ const createBooking = catchAsync(async (req, res) => {
 
 
 
-const getAllBookings = catchAsync(async (req, res) => {
-  const bookings = await BookingServices.getAllBookingsFromDB();
-  res.status(200).json({
-    status: httpStatus.OK,
-    message: "All bookings retrieved successfully",
-    success: true,
-    data: bookings,
-  });
-});
+// const getAllBookings = catchAsync(async (req, res) => {
+//   const bookings = await BookingServices.getAllBookingsFromDB();
+//   res.status(200).json({
+//     status: httpStatus.OK,
+//     message: "All bookings retrieved successfully",
+//     success: true,
+//     data: bookings,
+//   });
+// });
 
 
 
 
-const getBookingsByEmail = catchAsync(async (req, res) => {
-  const email = req.params.email; // Assuming email is passed as a URL parameter
-  const bookings = await BookingServices.getBookingsByUserEmail(email);
+// const getBookingsByEmail = catchAsync(async (req, res) => {
+//   const email = req.params.email; // Assuming email is passed as a URL parameter
+//   const bookings = await BookingServices.getBookingsByUserEmail(email);
 
-  res.status(200).json({
-    status: httpStatus.OK,
-    message: "Bookings retrieved successfully",
-    success: true,
-    data: bookings,
-  });
-});
+//   res.status(200).json({
+//     status: httpStatus.OK,
+//     message: "Bookings retrieved successfully",
+//     success: true,
+//     data: bookings,
+//   });
+// });
 
 export const BookingControllers = {
   createBooking,
-  getAllBookings,
-  getBookingsByEmail,
+  // getAllBookings,
+  // getBookingsByEmail,
 };

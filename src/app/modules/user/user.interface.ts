@@ -4,21 +4,16 @@ import { Model, Types } from 'mongoose'
 import { USER_ROLE } from './user.constant'
 
 export type TUser = {
-  name: string
-  email: string
-  password: string
-  phone: string
-  role: 'admin' | 'user'
-  address?: string
+  _id: string;
+  name: string;
+  email: string;
+  password: string;
+  phone: string;
+  role: 'admin' | 'user';
+  address?: string;
   image: string
   status: 'basic' | 'premium'
-  _id: string
-
-
-
-
-
-
+  
   following: Types.ObjectId[] // Use array of ObjectIds directly without wrapping in an object
   followers: Types.ObjectId[]
   

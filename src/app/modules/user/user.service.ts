@@ -82,7 +82,7 @@ const followUser = async (payload: FollowPayload) => {
     await User.findByIdAndUpdate(targetedObjectId, {
       $pull: { followers: userObjectId },
     })
-    return  'Unfollowed successfully' 
+    return  'Unfollow successfully' 
   } else {
     await User.findByIdAndUpdate(userObjectId, {
       $push: { following: targetedObjectId },

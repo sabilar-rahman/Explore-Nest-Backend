@@ -24,8 +24,8 @@ const userSchema = new Schema<TUser, UserModel>(
     // followers: [{ type: Schema.Types.ObjectId, ref: 'user', required: true }],
     // following: [{ type: Schema.Types.ObjectId, ref: 'user', required: true }],
 
-    followers: [{ type: Schema.Types.ObjectId, ref: "user" }],
-    following: [{ type: Schema.Types.ObjectId, ref: "user" }],
+    followers: [{ type: Schema.Types.ObjectId, ref: "user", required: false }],
+    following: [{ type: Schema.Types.ObjectId, ref: "user" , required: false}],
   },
   {
     timestamps: true,

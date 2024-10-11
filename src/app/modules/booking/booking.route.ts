@@ -7,6 +7,6 @@ import { BookingControllers } from './booking.controller'
 const router = express.Router()
 // booking routes
 router.post('/', auth(USER_ROLE.user), BookingControllers.createBooking)
-router.get('/', auth(USER_ROLE.admin), BookingControllers.getAllBookings)
+// router.get('/', auth(USER_ROLE.admin), BookingControllers.getAllBookings)
 
 export const BookingsRoutes = router

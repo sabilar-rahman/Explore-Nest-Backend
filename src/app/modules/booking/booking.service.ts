@@ -180,6 +180,6 @@ const createBookingIntoDB = async (
   return paymentRes
 }
 
-export const bookingServices = {
+export const BookingServices = {
   createBookingIntoDB,
 }

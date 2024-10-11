@@ -8,7 +8,7 @@ const createUserValidationSchema = z.object({
     phone: z.string().min(10, "Phone number must be valid"),
     role: z.enum(["admin", "user"]),
     address: z.string().optional(),
-    image: z.string().min(1, "Image is required"),
+    // image: z.string().min(1, "Image is required"),
   }),
 });
 

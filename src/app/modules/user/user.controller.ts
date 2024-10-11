@@ -13,12 +13,16 @@ import Post from "../post/post.model";
 
 const createUser = catchAsync(async (req, res) => {
   const userInfo = req.body;
-  const files = req.files as { avatar?: Express.Multer.File[] };
-  const userAvatar = files?.avatar?.[0]?.path;
+  const files = req.files as { image?: Express.Multer.File[] };
+  const userImage = files?.image?.[0]?.path;
+
+  console.log(userInfo);
+  console.log(files);
+
 
   const userData: TUser = {
     ...userInfo,
-    avatar: userAvatar,
+    image: userImage,
   };
 
   const result = await userServices.createUserIntoDb(userData);
