@@ -47,4 +47,8 @@ router.get('/user-by-id/:id', userControllers.getUserById)
 router.put('/update-user-role/:id', userControllers.updateUserRole)
 
 
+// statistics
+router.get('/statistics', userControllers.getSiteStatistics)
+
+
 export const UserRoutes = router;

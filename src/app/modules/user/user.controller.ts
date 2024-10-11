@@ -204,6 +204,36 @@ const updateUserRole = catchAsync(async (req, res) => {
 
 
 
+// site statistics
+
+
+const getSiteStatistics = catchAsync(async (req, res) => {
+  const totalUsers = await User.countDocuments()
+  const totalPremiumUsers = await User.countDocuments({ status: 'premium' })
+  const totalBasicUsers = await User.countDocuments({ status: 'basic' })
+
+  const totalContents = await Post.countDocuments()
+  const totalInactiveContents = await Post.countDocuments({ isActive: false })
+
+  const result = {
+    totalUsers: totalUsers,
+    totalPremiumUsers: totalPremiumUsers,
+    totalBasicUsers: totalBasicUsers,
+    totalContents: totalContents,
+    totalActiveContents: totalContents - totalInactiveContents,
+    totalInactiveContents: totalInactiveContents,
+  }
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Site statistics retrieved successfully',
+    data: result,
+  })
+})
+
+
+
 
 
 
@@ -235,6 +265,11 @@ export const userControllers = {
 
 
   updateUserRole,
+
+
+
+
+  getSiteStatistics,
 
 
 };

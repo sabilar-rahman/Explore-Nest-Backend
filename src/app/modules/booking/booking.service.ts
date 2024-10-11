@@ -138,9 +138,12 @@ export const BookingServices = {
 import { Types } from 'mongoose'
 
 import { initiatePayment } from '../payment/payment.utils'
+
+
 import { User } from '../user/user.model'
 import { TBooking, TBookingRequest } from './booking.interface'
 import { Booking } from './booking.model'
+import { transactionId } from '../utils/transactionId'
 const createBookingIntoDB = async (
   email: string,
   bookingData: TBookingRequest,
@@ -160,10 +163,11 @@ const createBookingIntoDB = async (
   }
 
 
+  const paymentRes = await initiatePayment(paymentData)
+
   const customerId = new Types.ObjectId(userInfo._id)
 
   const newBookingData: Partial<TBooking> = {
-    
     user: customerId,
     tran_id: transactionId,
     status: 'pending',
@@ -171,8 +175,9 @@ const createBookingIntoDB = async (
 
   await Booking.create(newBookingData)
 
-
   return paymentRes
 }
 
-
+export const bookingServices = {
+  createBookingIntoDB,
+}
