@@ -35,7 +35,7 @@ const getMyBookingsFromDb = async (email: string) => {
   const user = await User.findOne({ email })
   if (user) {
     const result = await Booking.find({
-      customer: user._id,
+      // customer: user._id,
       status: { $ne: 'pending' },
     })
       .populate('service', '_id name description price duration')

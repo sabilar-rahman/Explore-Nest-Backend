@@ -20,7 +20,7 @@ router.post(
   AuthControllers.loginUser,
 )
 router.post(
-  '/registration',
+  '/signup',
   multerUpload.fields([{ name: 'image' }]),
   validateImageFile(ImageFilesArrayZodSchema),
   parseBody,

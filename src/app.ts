@@ -27,6 +27,8 @@ app.use(
 app.use(express.json()); // This will parse incoming JSON requests
 app.use(cookieParser());
 
+
+// commonly used when submitting form data from a browser
 app.use(express.urlencoded({ extended: true }))
 
 
