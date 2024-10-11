@@ -20,5 +20,8 @@ export default {
 
 
 
-  client_live_url_service_page: process.env.CLIENT_LIVE_URL_SERVICE_PAGE,
+  client_live_url: process.env.CLIENT_LIVE_URL_LINK,
+
+
+  live_backend_url:process.env.BACKEND_LIVE_URL_LINK
 };

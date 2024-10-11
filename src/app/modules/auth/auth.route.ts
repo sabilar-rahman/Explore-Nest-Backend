@@ -37,6 +37,9 @@ router.put(
   AuthControllers.changePassword,
 )
 
+//  refresh token
+router.post('/refresh-token', AuthControllers.getRefreshToken)
+
 
 
 

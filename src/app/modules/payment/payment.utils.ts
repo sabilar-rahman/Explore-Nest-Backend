@@ -1,28 +1,29 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import dotenv from "dotenv";
 import axios from "axios";
+import config from "../../config";
 
-import { TPaymentInfo } from './paymentinterface'
+
 
 dotenv.config();
-export const initiatePayment = async (bookingDetails: any) => {
+export const initiatePayment = async (paymentData:any) => {
   try {
     const response = await axios.post(process.env.PAYMENT_URL!, {
       store_id: process.env.STORE_ID,
       signature_key: process.env.SIGNATURE_KEY,
-      tran_id: bookingDetails.tran_id,
-      success_url: `https://turbo-shine-server-backend.vercel.app/api/payment/confirmation?tran_id=${bookingDetails.tran_id}&status=success`,
-      fail_url: `https://turbo-shine-server-backend.vercel.app/api/payment/confirmation?status=failed`,
-      cancel_url: "https://turbo-shine-client-frontend.vercel.app",
-      amount: bookingDetails.amount,
+      tran_id: paymentData.tran_id,
+      success_url: `${config.live_backend_url}/api/payment/confirmation?tran_id=${paymentData.tran_id}&status=success`,
+      fail_url: `${config.live_backend_url}/api/payment/confirmation?status=failed`,
+      cancel_url: `${config.client_live_url}`,
+      amount: paymentData.amount,
       currency: "BDT",
       desc: "Service Booking Payment",
-      cus_name: bookingDetails.customer.name,
-      cus_email: bookingDetails.customer.email,
-      cus_add1: bookingDetails.customer.address,
-      cus_city: bookingDetails.customer.city || "Dhaka",
+      cus_name: paymentData.customer.name,
+      cus_email: paymentData.customer.email,
+      cus_add1: paymentData.customer.address,
+      cus_city: paymentData.customer.city || "Dhaka",
       cus_country: "Bangladesh",
-      cus_phone: bookingDetails.customer.phone,
+      cus_phone: paymentData.customer.phone,
       type: "json",
     });
     const paymentUrl = response.data?.payment_url;

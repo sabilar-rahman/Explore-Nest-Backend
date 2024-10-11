@@ -9,6 +9,7 @@ import sendResponse from "../utils/sendResponse";
 import { TUser } from "./user.interface";
 import { getUserInfoFromToken } from "../utils/getUserInfoFromToken";
 import { User } from "./user.model";
+import Post from "../post/post.model";
 
 const createUser = catchAsync(async (req, res) => {
   const userInfo = req.body;

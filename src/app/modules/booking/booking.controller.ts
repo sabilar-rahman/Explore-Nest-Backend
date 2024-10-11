@@ -1,9 +1,9 @@
 import httpStatus from "http-status";
 
-
-
-import { BookingServices } from "./booking.service";
 import catchAsync from "../utils/catchAsync";
+import { getUserInfoFromToken } from "../utils/getUserInfoFromToken";
+import { bookingServices } from "./booking.service";
+import sendResponse from "../utils/sendResponse";
 
 
 // ============================================================
@@ -31,15 +31,22 @@ import catchAsync from "../utils/catchAsync";
 
 
 const createBooking = catchAsync(async (req, res) => {
-  const result = await BookingServices.createBookingIntoDB(req.body);
+  const token = req.headers.authorization
+  const bookingData = req.body
 
-  res.status(200).json({
-    success: true,
+  const { email } = getUserInfoFromToken(token as string)
+
+  const result = await bookingServices.createBookingIntoDB(email, bookingData)
+
+  sendResponse(res, {
     statusCode: httpStatus.OK,
-    message: "Booking successful",
+    success: true,
+    message: 'Booking successful',
     data: result,
-  });
-});
+  })
+})
+
+
 
 const getAllBookings = catchAsync(async (req, res) => {
   const bookings = await BookingServices.getAllBookingsFromDB();
@@ -50,6 +57,9 @@ const getAllBookings = catchAsync(async (req, res) => {
     data: bookings,
   });
 });
+
+
+
 
 const getBookingsByEmail = catchAsync(async (req, res) => {
   const email = req.params.email; // Assuming email is passed as a URL parameter

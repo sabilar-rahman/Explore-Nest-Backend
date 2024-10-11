@@ -4,7 +4,8 @@ import { USER_ROLE } from "../user/user.constant";
 import { commentControllers } from "./comment.controller";
 
 const router = express.Router();
-// user routes
+
+
 
 router.post(
   "/:id",

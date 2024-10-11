@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.get("/all-posts", postControllers.getAllPosts);
 
-router.get('/single-post/:id', postControllers.getSinglePost)
+router.get("/single-post/:id", postControllers.getSinglePost);
 
 // router.post(
 //   "/create-post",
@@ -20,13 +20,12 @@ router.get('/single-post/:id', postControllers.getSinglePost)
 //   postControllers.createPost
 // );
 
-
 router.post(
-    '/create-post',
-    multerUpload.single('image'),
-    parseBody,
-    postControllers.createPost,
-  )
+  "/create-post",
+  multerUpload.single("image"),
+  parseBody,
+  postControllers.createPost
+);
 
 // router.put(
 //   "/update-post/:id",
@@ -35,13 +34,11 @@ router.post(
 // );
 
 router.put(
-    '/update-post/:id',
-    multerUpload.single('image'),
-    parseBody,
-    postControllers.updatePost,
-  )
-
-
+  "/update-post/:id",
+  multerUpload.single("image"),
+  parseBody,
+  postControllers.updatePost
+);
 
 router.delete(
   "/delete-post/:id",
@@ -49,20 +46,21 @@ router.delete(
   postControllers.deletePost
 );
 
-// upvote and downvote 
-router.post('/upvote/:id', postControllers.upVotePost)
-router.post('/downvote/:id', postControllers.downVotePost)
+// upvote and downvote
+router.post("/upvote/:id", postControllers.upVotePost);
+router.post("/downvote/:id", postControllers.downVotePost);
 
 // popular post get
-router.get('/popular', postControllers.getPopularPosts)
-
+router.get("/popular", postControllers.getPopularPosts);
 
 // post by authors
-router.get('/posts-by-author/:id', postControllers.getPostsByAuthor)
-
+router.get("/posts-by-author/:id", postControllers.getPostsByAuthor);
 
 // active & inactive
-router.get('/all-active-inactive-posts', postControllers.getAllAcInacPosts)
-
+router.get(
+  "/all-active-inactive-posts",
+  auth(USER_ROLE.admin),
+  postControllers.getAllAcInacPosts
+);
 
 export const PostRoutes = router;
